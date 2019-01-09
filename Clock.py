@@ -3,7 +3,7 @@
 import turtle
 from datetime import *
 
-# 抬起画笔，向钱运动一定距离放下
+# 抬起画笔，向前运动一段距离放下
 def Skip(step):
 	turtle.penup()
 	turtle.forward(step)
@@ -16,18 +16,17 @@ def mkHand(name,length):
 	# 开始记录多边形的顶点。当前的乌龟位置是多边形的第一个顶点。
 	turtle.begin_poly()
 	turtle.forward(length * 1.1)
-	# 停止记录多边形的顶点。当前的乌龟位置是多边形的最后
-	# 一个顶点。将于第一个顶点相连。
+	# 停止记录多边形的顶点。当前的乌龟位置是多边形的最后一个顶点。将与第一个顶点相连。
 	turtle.end_poly()
 	# 返回最后记录的多边形。
-	handForm = turtle.get_ploy()
+	handForm = turtle.get_poly()
 	turtle.register_shape(name,handForm)
 	
 def Init():
 	global secHand,minHand,hurHand,printer
 	# 重置Turtle指向北
 	turtle.mode("logo")
-	# 建立单个表针Turtle并实现初始化
+	# 建立三个表针Turtle并初始化
 	mkHand("secHand",135)
 	mkHand("minHand",125)
 	mkHand("hurHand",90)
@@ -93,24 +92,26 @@ def Tick():
 	t = datetime.today()
 	second = t.second + t.microsecond * 0.000001
 	minute = t.minute + second / 60.0
-	hour = t.hour + t.minute / 60.0
+	hour = t.hour + minute / 60.0
 	secHand.setheading(6 * second)
 	minHand.setheading(6 * minute)
 	hurHand.setheading(30 * hour)
 	
 	turtle.tracer(False)
 	printer.forward(65)
-	printer.write(Week(t), align="center", font=("Courier",14, "bold"))
+	printer.write(Week(t), align="center", 
+				  font=("Courier",14, "bold"))
 	printer.back(130)
-	printer.write(Date(t),align="center",font=("Courier",14, "bold"))
+	printer.write(Date(t),align="center",
+				  font=("Courier",14, "bold"))
 	printer.home()
 	turtle.tracer(True)
 	
 	# 100m 后继续调用tick
-	turtle.tracer(Tick,100)
+	turtle.ontimer(Tick,100)
 	
 def main():
-	# 打开/关闭龟动画，并更新图纸设置延迟。
+	# 打开/关闭龟动画，并为更新图纸设置延迟。
 	turtle.tracer(False)
 	Init()
 	SetupClock(160)
@@ -118,7 +119,7 @@ def main():
 	Tick()
 	turtle.mainloop()
 	
-if __name__ == "__name__":
+if __name__ == "__main__":
 	main()
 
 
